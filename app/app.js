@@ -43,6 +43,9 @@ passport.use(new LocalStrategy(
   }
 ));
 
+var Routes = require('./controllers/routes');
+Routes(app);
+
 
 var server = app.listen(3000, function() {
   var host = server.address().address
