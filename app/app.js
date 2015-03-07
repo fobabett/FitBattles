@@ -1,8 +1,10 @@
 var express = require('express');
 var app = express();
 var passport = require('passport');
-var bodyParser = require('body-parser')
-LocalStrategy = require('passport-local').Strategy;
+var bodyParser = require('body-parser');
+var mongoode = require('mongoose');
+var LocalStrategy = require('passport-local').Strategy;
+var User = require('./models/user')
 
 
 // middleware
