@@ -1,13 +1,14 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 
+
 var userSchema = mongoose.Schema({
   username: String,
   password: String
-});
 
-userSchema.methods.validPassowrd = function(check_password) {
-  return(passwordCrypt(check_password) === this.password);
+});
+userSchema.methods.validPassword = function (check_password) {
+  return (passwordCrypt(check_password) === this.password);
 };
 
 function passwordCrypt(password) {
@@ -18,6 +19,7 @@ function passwordCrypt(password) {
     var shasum = crypto.createHash('sha512');
     shasum.update( salted_user_password );
     var input_result = shasum.digest('hex');
+  
     return input_result
 }
 

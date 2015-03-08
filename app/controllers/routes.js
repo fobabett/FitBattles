@@ -1,5 +1,7 @@
 var express = require('express');
 var passport = require('passport');
+var User = require('../models/user');
+var crypto = require('crypto');
 
 var Routes = function(app) {
 
@@ -26,13 +28,25 @@ var Routes = function(app) {
     res.render("index.jade");
   });
 
-  // registration
-
+  app.get('/login', function (req, res) {
+    //res.render("login", { user: req.user, messages: req.flash('error') });
+    res.render("login.jade")
+  });
+  
+  
+  app.get('/secretRoom', ensureAuthenticated, function (req, res){
+    res.send("welcome to the secret room")
+  
+  });
+  
   app.get('/registration', function (req, res){
     res.render("registration.jade")
   });
-
-   app.post('/registration', function (req, res){
+  
+  //Saves user registration info
+  
+  //checking if username exists
+  app.post('/registration', function (req, res){
   
     
     User.findOne({username: req.body.username}, function(err, user){
@@ -53,17 +67,6 @@ var Routes = function(app) {
         })    
       }
     });
-  });
-  
-  app.get('/login', function (req, res) {
-    //res.render("login", { user: req.user, messages: req.flash('error') });
-    res.render("login.jade")
-  });
-  
-  
-  app.get('/secretRoom', ensureAuthenticated, function (req, res){
-    res.send("welcome to the secret room")
-  
   });
   
   //post request authentication
@@ -94,5 +97,18 @@ var Routes = function(app) {
     }
     res.redirect('/login');
   }
+
+  function passwordCrypt(password) {
+
+  var salt = process.env.SALT;
+    var user_password = password;
+    var salted_user_password = user_password + salt; 
+    var shasum = crypto.createHash('sha512');
+    shasum.update( salted_user_password );
+    var input_result = shasum.digest('hex');
+  
+    return input_result
+}
+
 }
 module.exports = Routes;

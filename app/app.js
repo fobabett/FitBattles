@@ -11,6 +11,7 @@ var methodOverride = require('method-override');
 mongoose.connect(config.databaseURI);
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('./models/user');
+var logger = require('morgan');
 
 
 app.use(session(
@@ -28,6 +29,7 @@ app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/')); 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(logger("dev"));
 module.exports = app;
 
 
