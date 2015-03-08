@@ -4,9 +4,12 @@ var crypto = require('crypto');
 
 var userSchema = mongoose.Schema({
   username: String,
-  password: String
-
+  password: String,
+  currentWeight: Number,
+  goalWeight: Number,
+  friends: Array
 });
+
 userSchema.methods.validPassword = function (check_password) {
   return (passwordCrypt(check_password) === this.password);
 };

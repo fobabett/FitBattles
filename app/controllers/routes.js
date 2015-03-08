@@ -35,7 +35,7 @@ var Routes = function(app) {
   
   
   app.get('/secretRoom', ensureAuthenticated, function (req, res){
-    res.send("welcome to the secret room")
+    res.send("login successful")
   
   });
   
