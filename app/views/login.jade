@@ -1,0 +1,16 @@
+doctype html
+html(lang="en")
+head
+  meta(charset="UTF-8")
+  title Login Page
+body
+  .header
+    a(href="/")
+      h1.logo FitBattles
+  #content
+    form(action="/login", method="post")
+      label Username:
+      input(type="text", name="username")
+      label Password:
+      input(type="password", name="password")
+      button(type="submit", value="Log In") Login

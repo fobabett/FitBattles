@@ -21,7 +21,17 @@ var Routes = function(app) {
       req.send();
     });
   }
+
+  app.get('/', function(req, res) {
+    res.render("index.jade");
+  });
+
   // registration
+
+  app.get('/registration', function (req, res){
+    res.render("registration.jade")
+  });
+
    app.post('/registration', function (req, res){
   
     
@@ -45,10 +55,21 @@ var Routes = function(app) {
     });
   });
   
+  app.get('/login', function (req, res) {
+    //res.render("login", { user: req.user, messages: req.flash('error') });
+    res.render("login.jade")
+  });
+  
+  
+  app.get('/secretRoom', ensureAuthenticated, function (req, res){
+    res.send("welcome to the secret room")
+  
+  });
+  
   //post request authentication
   app.post('/login',
     passport.authenticate('local', {
-      successRedirect: '/test',
+      successRedirect: '/secretRoom',
       failureRedirect: '/login',
       failureFlash: false
     })

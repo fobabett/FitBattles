@@ -1,17 +1,30 @@
+var config = require('./config.json');
 var express = require('express');
 var app = express();
 var passport = require('passport');
 var bodyParser = require('body-parser');
-var mongoode = require('mongoose');
+var mongoose = require('mongoose');
+var secret = process.env.DBPASS;
+var session = require('express-session');
+var Schema = mongoose.Schema;
+var methodOverride = require('method-override');
+mongoose.connect(config.databaseURI);
 var LocalStrategy = require('passport-local').Strategy;
-var User = require('./models/user')
+var User = require('./models/user');
 
+
+app.use(session(
+{
+  secret: config.secret,
+  resave: false,
+  saveUninitialized: true
+}));
 
 // middleware
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.engine('html', require('jade').__express);
-// app.set('view engine', 'html');
-// app.set('views', __dirname + '/views');
+app.engine('html', require('jade').__express);
+app.set('view engine', 'html');
+app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/')); 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -35,7 +48,7 @@ passport.use(new LocalStrategy(
         return done(err);
       }
       if(!user) {
-        return done(null, flase, { message: 'Incorrect username.'});
+        return done(null, false, { message: 'Incorrect username.'});
       }
       if(!user.validPassword(password)) {
         return done(null, false, { message: 'Incorrect password'});
@@ -49,9 +62,8 @@ var Routes = require('./controllers/routes');
 Routes(app);
 
 
-var server = app.listen(3000, function() {
-  var host = server.address().address
-  var port = server.address().port
-
-  console.log('Example app listening at http://%s:%s', host, port);
+var server = app.listen(config.port, function (){
+  var host = server.address().address;
+  var port = server.address().port;
+  console.log('Example app listening at http://%s:%s', host, port)
 });
