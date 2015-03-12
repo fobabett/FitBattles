@@ -34,9 +34,8 @@ var Routes = function(app) {
   });
   
   
-  app.get('/secretRoom', ensureAuthenticated, function (req, res){
-    res.send("login successful")
-  
+  app.get('/home', ensureAuthenticated, function (req, res){
+    res.render("home.jade")
   });
   
   app.get('/registration', function (req, res){
@@ -72,21 +71,39 @@ var Routes = function(app) {
   //post request authentication
   app.post('/login',
     passport.authenticate('local', {
-      successRedirect: '/secretRoom',
+      successRedirect: '/home',
       failureRedirect: '/login',
       failureFlash: false
     })
   
   );
   
-  app.get('/login', function(req,res){
-    res.render("login", {user: req.user, messages: "error"})
-  });
   
   //post log out
   app.get('/logout', function(req, res){
     req.logout();
     res.redirect('/login');
+  });
+
+  // gets current and goal weight from user
+  app.put('/home', function(req,res) {
+     User.findOne(function(err, user){
+      if (err) {
+        return err;
+      };
+      if (user){
+        res.send("weight loss goals saved")
+        user.currentWeight = req.body.currentWeight;
+        user.goalWeight = req.body.goalWeight;
+
+        user.save(function(err, user) {
+          if (err){
+            throw err;
+          }
+          // res.redirect('/');
+        })
+      } 
+    });
   });
   
   function ensureAuthenticated(req, res, next){

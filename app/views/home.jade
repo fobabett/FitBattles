@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+html(lang="en")
+head
+  meta(charset="UTF-8")
+  title Home
+body
+  h1 FitBattles
+  div#enter_weight
+    form(action="/home", method="post")
+      label Current Weight:
+      input(type="text", name="currentWeight")
+      label Goal Weight:
+      input(type="text", name="goalWeight")
+      button(type="submit", value="weight") Submit

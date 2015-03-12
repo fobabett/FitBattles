@@ -5,6 +5,7 @@ var crypto = require('crypto');
 var userSchema = mongoose.Schema({
   username: String,
   password: String,
+  startingWeight: Number,
   currentWeight: Number,
   goalWeight: Number,
   friends: Array
