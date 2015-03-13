@@ -86,13 +86,13 @@ var Routes = function(app) {
   });
 
   // gets current and goal weight from user
-  app.put('/home', function(req,res) {
+  app.post('/home', function(req,res) {
      User.findOne(function(err, user){
       if (err) {
         return err;
       };
       if (user){
-        res.send("weight loss goals saved")
+        // res.send("weight loss goals saved")
         user.currentWeight = req.body.currentWeight;
         user.goalWeight = req.body.goalWeight;
 
@@ -100,7 +100,7 @@ var Routes = function(app) {
           if (err){
             throw err;
           }
-          // res.redirect('/');
+          res.redirect('/');
         })
       } 
     });
@@ -125,7 +125,6 @@ var Routes = function(app) {
     var input_result = shasum.digest('hex');
   
     return input_result
-}
-
+  }
 }
 module.exports = Routes;
