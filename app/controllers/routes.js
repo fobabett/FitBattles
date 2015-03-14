@@ -91,24 +91,31 @@ var Routes = function(app) {
       if (err) {
         return err;
       };
-      if (user){
-        // res.send("weight loss goals saved")
-        user.currentWeight = req.body.currentWeight;
-        user.goalWeight = req.body.goalWeight;
+      if (req.user){
+        req.user.currentWeight = req.body.currentWeight;
+        req.user.goalWeight = req.body.goalWeight;
 
-        user.save(function(err, user) {
+        req.user.save(function(err, user) {
           if (err){
             throw err;
           }
-          res.redirect('/');
+          res.send('weight saved');
+          console.log('saved to: ',req.user.username);
+          // console.log(req.user)
+          // console.log(req.isAuthenticated())
         })
+      } else {
+        res.send(404);
       } 
     });
+   
   });
+
+
   
   function ensureAuthenticated(req, res, next){
-    console.log(req.user)
-    console.log(req.isAuthenticated())
+    console.log('login: ',req.user.username)
+    // console.log(req.isAuthenticated())
     if(req.isAuthenticated()){
       return next();
     }
