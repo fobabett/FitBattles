@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var userSchema = mongoose.Schema({
   username: String,

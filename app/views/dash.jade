@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+html(lang="en")
+head
+  meta(charset="UTF-8")
+  link(rel='stylesheet', href='../css/styles.css')  
+  title Dash
+body
+  h1 Welcome 
+    =username +'!'
+  div#main-container
+    button(onclick='clickFunction()', type='submit') New Weight 
+    script.
+        function clickFunction() {
+          document.getElementById("popup").style.visibility = "visible";
+        }
+    //- form(action="/dash", method="post")
+    //-   button(type="submit", value="friends") add friends
+  p current weight: 
+    =currentWeight 
+  p goal weight: 
+    =goalWeight  
+    div#popup
+      form(action="/dash", method="post")
+        label Current Weight:
+        input(type="text", name="currentWeight")
+        button(type="submit", value="weight") Submit

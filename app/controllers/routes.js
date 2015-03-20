@@ -85,6 +85,81 @@ var Routes = function(app) {
     res.redirect('/login');
   });
 
+  app.get('/dash', function(req, res){
+    User.findOne(function(err, user) {
+      if(err) {
+        throw err;
+      }
+      console.log(req.user.currentWeight);
+
+      // var currentWeight = req.user.currentWeight;
+      // var goalWeight = req.user.currentWeight;
+
+    })
+
+    res.render('dash.jade', {
+      currentWeight: req.user.currentWeight,
+      goalWeight: req.user.goalWeight,
+      username: req.user.username
+    })
+  });
+
+  app.post('/dash', function(req,res) {
+    User.findOne(function(err, user) {
+      if(err) {
+        return err;
+      }
+      if(user) {
+        req.user.currentWeight = req.body.currentWeight;
+
+        req.user.save(function(err, user) {
+          if(err) {
+            throw err;
+          }
+          res.redirect('/dash');
+          console.log('new weight saved to: ', req.user.username);
+        })
+      }
+    })
+  })
+
+  // app.post('/dash', function(req,res) {
+  //   User.findOne(function(err, user) {
+  //     if(err) {
+  //       return err;
+  //     }
+  //     if(user) {
+  //       req.user.currentWeight = req.body.currentWeight;
+
+  //       req.user.save(function(err, user) {
+  //         if(err) {
+  //           throw err;
+  //         }
+  //         res.redirect('/dash');
+  //         console.log('saved to: ',req.user.username);
+  //       })
+  //     }
+  //   })
+  // })
+
+  // app.post('/dash', function(req, res) {
+  //   User.findOne(function(err, user) {
+  //     if(err) {
+  //       return err;
+  //     }
+  //     if(user) {
+  //       req.user.friends = req.body.friends
+  //       req.user.save(function(err, user) {
+  //         if(err) {
+  //           throw err;
+  //         }
+  //         res.redirect('/dash');
+  //         console.log('friend added to : ',req.user.username, ' friendlist!');
+  //       })
+  //     }
+  //   })
+  // })
+
   // gets current and goal weight from user
   app.post('/home', function(req,res) {
      User.findOne(function(err, user){
@@ -92,17 +167,16 @@ var Routes = function(app) {
         return err;
       };
       if (req.user){
-        req.user.currentWeight = req.body.currentWeight;
+        req.user.startingWeight = req.body.startingWeight;
         req.user.goalWeight = req.body.goalWeight;
+        req.user.currentWeight = req.body.startingWeight;
 
         req.user.save(function(err, user) {
           if (err){
             throw err;
           }
-          res.send('weight saved');
+          res.redirect('/dash');
           console.log('saved to: ',req.user.username);
-          // console.log(req.user)
-          // console.log(req.isAuthenticated())
         })
       } else {
         res.send(404);
