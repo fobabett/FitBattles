@@ -18,7 +18,9 @@ body
   p current weight: 
     =currentWeight 
   p goal weight: 
-    =goalWeight  
+    =goalWeight 
+  p 
+    =weightToGo +' pounds to go!'   
     div#popup
       form(action="/dash", method="post")
         label Current Weight:
