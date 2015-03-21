@@ -11,8 +11,8 @@ body
     div#monster
         p 
           =weightToGo +'/'+ health
-        progress(id='health', value='10', max='15')    
-      img(src="./images/Monster.png", alt="")
+        progress(id='health', value=weightToGo, max=health)    
+      img(id="monster_img", src="./images/Monster.png", alt="")
     button(onclick='clickFunction()', type='submit') Attack With New Weight! 
     script.
         function clickFunction() {

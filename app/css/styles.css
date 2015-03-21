@@ -1,3 +1,6 @@
 #popup {
   visibility: hidden;
 }
+progress {
+  background-color: #eee;
+}
