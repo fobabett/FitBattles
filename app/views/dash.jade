@@ -13,6 +13,8 @@ body
           =weightToGo +'/'+ health
         progress(id='health', value=weightToGo, max=health)    
       img(id="monster_img", src="./images/Monster.png", alt="")
+    div#fitWarrior
+      img(id="attack", src="./images/sword.png", alt="")    
     button(onclick='clickFunction()', type='submit') Attack With New Weight! 
     script.
         function clickFunction() {
@@ -30,4 +32,6 @@ body
       form(action="/dash", method="post")
         label Current Weight:
         input(type="text", name="currentWeight")
-        button(type="submit", value="weight") Submit
+        button(id="newWeight", type="submit", value="weight") Submit
+  script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js")      
+  script(src='/js/animation.js')      
