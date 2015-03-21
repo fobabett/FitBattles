@@ -8,7 +8,12 @@ body
   h1 Welcome 
     =username +'!'
   div#main-container
-    button(onclick='clickFunction()', type='submit') New Weight 
+    div#monster
+        p 
+          =weightToGo +'/'+ health
+        progress(id='health', value='10', max='15')    
+      img(src="./images/Monster.png", alt="")
+    button(onclick='clickFunction()', type='submit') Attack With New Weight! 
     script.
         function clickFunction() {
           document.getElementById("popup").style.visibility = "visible";
