@@ -3,10 +3,12 @@ html {
 }
 div#battle-box {
   border: 2px solid black;
+  /*min-height: 600px;*/
+  /*width: 400px;*/
 }
 img#monster_img {
-    -webkit-animation: breathing 7s ease-out infinite normal;
-    animation: breathing 7s ease-out infinite normal;
+    -webkit-animation: breathing 4s ease-out infinite normal;
+    animation: breathing 4s ease-out infinite normal;
     -webkit-font-smoothing: antialiased;
     }
 

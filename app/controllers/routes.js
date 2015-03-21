@@ -92,16 +92,13 @@ var Routes = function(app) {
       }
       console.log(req.user.currentWeight);
 
-      // var currentWeight = req.user.currentWeight;
-      // var goalWeight = req.user.currentWeight;
-      
-
     })
     var weightLeft = req.user.currentWeight - req.user.goalWeight;
     var health = req.user.startingWeight - req.user.goalWeight;
     var attack = health - req.user.currentWeight; 
 
     res.render('dash.jade', {
+      startingWeight: req.user.startingWeight,
       currentWeight: req.user.currentWeight,
       goalWeight: req.user.goalWeight,
       username: req.user.username,

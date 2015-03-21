@@ -23,10 +23,12 @@ body
         }
     //- form(action="/dash", method="post")
     //-   button(type="submit", value="friends") add friends
-  p current weight: 
-    =currentWeight 
-  p goal weight: 
-    =goalWeight 
+  p SW: 
+    =startingWeight +'lbs'
+  p CW: 
+    =currentWeight +'lbs'
+  p GW: 
+    =goalWeight +'lbs'
   p 
     =weightToGo +' pounds to go!'   
     div#popup

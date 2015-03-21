@@ -9,7 +9,8 @@ var userSchema = mongoose.Schema({
   startingWeight: Number,
   currentWeight: Number,
   goalWeight: Number,
-  friends: Array
+  friends: Array,
+  points: Number
 });
 
 userSchema.methods.validPassword = function (check_password) {
