@@ -123,7 +123,7 @@ var Routes = function(app) {
           if(err) {
             throw err;
           }
-          // res.redirect('/dash');
+          res.redirect('/dash');
           console.log('new weight saved to: ', req.user.username);
         })
       }
