@@ -32,7 +32,7 @@ body
   p 
     =weightToGo +' pounds to go!'   
     div#popup
-      form(action="/dash", method="post")
+      form(action="/progress", method="post")
         label Current Weight:
         input(type="text", name="currentWeight")
         button(id="newWeight", type="submit", value="weight") Submit

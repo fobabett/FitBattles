@@ -9,6 +9,7 @@ var userSchema = mongoose.Schema({
   startingWeight: Number,
   currentWeight: Number,
   goalWeight: Number,
+  weightLost: Number,
   friends: Array,
   points: Number
 });

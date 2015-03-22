@@ -1,6 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var User = require('../models/user');
+var Activity = require('../models/activity');
 var crypto = require('crypto');
 
 var Routes = function(app) {
@@ -41,6 +42,32 @@ var Routes = function(app) {
   app.get('/registration', function (req, res){
     res.render("registration.jade")
   });
+
+// feed of user's and friends weightloss and points
+  app.get('/feed', function (req, res) {
+    User.findOne(function(err, user) {
+      if(err) {
+        return err;
+      }
+      if(user) {
+        Activity.find({}, function(err, docs) {
+          for (var i = 0; i < docs.length; i++) {
+            var weight = docs[i].weightLost;
+            var user = docs[i].user;
+          };
+          
+          res.render('feed.jade', {
+            activity: docs,
+            weightLost: weight,
+            username: user
+          })
+        })
+      }
+    })
+    
+    
+    
+  })
   
   //Saves user registration info
   
@@ -85,7 +112,7 @@ var Routes = function(app) {
     res.redirect('/login');
   });
 
-  app.get('/dash', function(req, res){
+  app.get('/progress', function(req, res){
     User.findOne(function(err, user) {
       if(err) {
         throw err;
@@ -97,7 +124,8 @@ var Routes = function(app) {
     var health = req.user.startingWeight - req.user.goalWeight;
     var attack = health - req.user.currentWeight; 
 
-    res.render('dash.jade', {
+
+    res.render('progress.jade', {
       startingWeight: req.user.startingWeight,
       currentWeight: req.user.currentWeight,
       goalWeight: req.user.goalWeight,
@@ -108,61 +136,46 @@ var Routes = function(app) {
     })
   });
 
-  app.post('/dash', function(req,res) {
+  app.post('/progress', function(req,res) {
     User.findOne(function(err, user) {
+      
       if(err) {
         return err;
       }
       if(user) {
+        var activity = new Activity(req.body);
+  
+        activity.user = req.body.user;
+        activity.user = req.user.username;
+        activity.weightLost = req.body.weightLost;
+        activity.weightLost = req.user.weightLost;
+        activity.date = req.body.date;
+    
+        activity.save(function(err, activity) {
+          if(err) {
+            throw err;
+          }
+        });
+
+        var lastWeight = req.body.currentWeight;
+
         req.user.currentWeight = req.body.currentWeight;
+        req.user.weightLost = req.body.weightLost;
+        req.user.weightLost = lastWeight - req.user.currentWeight;
 
         req.user.save(function(err, user) {
           if(err) {
             throw err;
           }
-          res.redirect('/dash');
+          res.redirect('/progress');
           console.log('new weight saved to: ', req.user.username);
         })
       }
     })
   })
 
-  // app.post('/dash', function(req,res) {
-  //   User.findOne(function(err, user) {
-  //     if(err) {
-  //       return err;
-  //     }
-  //     if(user) {
-  //       req.user.currentWeight = req.body.currentWeight;
 
-  //       req.user.save(function(err, user) {
-  //         if(err) {
-  //           throw err;
-  //         }
-  //         res.redirect('/dash');
-  //         console.log('saved to: ',req.user.username);
-  //       })
-  //     }
-  //   })
-  // })
 
-  // app.post('/dash', function(req, res) {
-  //   User.findOne(function(err, user) {
-  //     if(err) {
-  //       return err;
-  //     }
-  //     if(user) {
-  //       req.user.friends = req.body.friends
-  //       req.user.save(function(err, user) {
-  //         if(err) {
-  //           throw err;
-  //         }
-  //         res.redirect('/dash');
-  //         console.log('friend added to : ',req.user.username, ' friendlist!');
-  //       })
-  //     }
-  //   })
-  // })
 
   // gets current and goal weight from user
   app.post('/home', function(req,res) {
@@ -179,7 +192,7 @@ var Routes = function(app) {
           if (err){
             throw err;
           }
-          res.redirect('/dash');
+          res.redirect('/progress');
           console.log('saved to: ',req.user.username);
         })
       } else {
@@ -188,7 +201,6 @@ var Routes = function(app) {
     });
    
   });
-
 
   
   function ensureAuthenticated(req, res, next){

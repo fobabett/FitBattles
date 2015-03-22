@@ -4,7 +4,7 @@ var crypto = require('crypto');
 var activitySchema = mongoose.Schema({
   user: String,
   body: String,
-  weightLost: String,
+  weightLost: Number,
   date: {type: Date, default: Date.now}
 });
 
