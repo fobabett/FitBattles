@@ -90,7 +90,6 @@ module.exports = function friendshipInit(options) {
     });
   }
 
-  // get list of friends on account
   FriendshipSchema.statics.getFriends = function(accountId, done) {
     debug('GetFriends');
 
@@ -121,6 +120,39 @@ module.exports = function friendshipInit(options) {
         });
         debug('friendIds', friendIds);
         done(null, friendIds);
+      }
+    });
+  }
+
+  // shows user's friends
+  FriendshipSchema.statics.getFriendsOfFriends = function(accountId, done) {
+    debug('getFriendsOfFriends');
+
+    var self = this;
+    var idsFound = [];
+
+    this.getFriends(accountId, function(err, friendsIds) {
+      if(err) {
+        done(err);
+      } else if(!friendIds.length) {
+        done(null, idsFound);
+      } else {
+        async.map(friendIds, eachfriend, function(err, results) {
+          results.forEach(function(friendFriends) {
+            friendsFriends.forEach(function(friendOfFriendId) {
+              if(idsFound.indexOf(friendOfFriendId) === -1 && !accountId.equals(friendOfFriendId)) {
+                idsFound.push(friendOfFriendId);
+                debug('adding' + friendOfFriendId);
+              } else {
+                debug(friendOfFriendId + 'already added');
+              }
+            });
+          });
+          done(null, idsFound);
+        });
+        function eachFriend(friendId, complete) {
+          self.getFriends(friendId, complete);
+        }
       }
     });
   }
