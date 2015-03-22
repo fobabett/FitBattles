@@ -9,7 +9,8 @@ body
   div#container
     div#post
       - for (var i=0; i<activity.length; i++)
-        p 
-          =activity[i].user +' lost '+activity[i].weightLost+' lbs!'
+        if activity[i].weightLost !== 0 && activity[i].weightLost > 0
+          p 
+            =activity[i].user +' lost '+activity[i].weightLost+' lbs!'
       p
         =username+' gained '+'2 points for signing in today!'  
