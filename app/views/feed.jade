@@ -2,6 +2,7 @@
 html(lang="en")
 head
   meta(charset="UTF-8")
+  link(rel='stylesheet', href='../css/styles.css')    
   title FitFeed
 body
   h1 FitFeed
@@ -9,4 +10,6 @@ body
     div#post
       - for (var i=0; i<activity.length; i++)
         p 
-          =activity[i].user +' lost '+activity[i].weightLost+' lbs!'+activity[i].date  
+          =activity[i].user +' lost '+activity[i].weightLost+' lbs!'
+      p
+        =username+' gained '+'2 points for signing in today!'  

@@ -63,10 +63,7 @@ var Routes = function(app) {
           })
         })
       }
-    })
-    
-    
-    
+    }) 
   })
   
   //Saves user registration info
@@ -157,11 +154,10 @@ var Routes = function(app) {
           }
         });
 
-        var lastWeight = req.body.currentWeight;
-
-        req.user.currentWeight = req.body.currentWeight;
         req.user.weightLost = req.body.weightLost;
-        req.user.weightLost = lastWeight - req.user.currentWeight;
+        req.user.weightLost = req.body.currentWeight - req.body.currentWeight;
+        req.user.currentWeight = req.body.currentWeight;
+        
 
         req.user.save(function(err, user) {
           if(err) {

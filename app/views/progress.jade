@@ -29,12 +29,15 @@ body
     =currentWeight +'lbs'
   p GW: 
     =goalWeight +'lbs'
-  p 
-    =weightToGo +' pounds to go!'   
-    div#popup
-      form(action="/progress", method="post")
-        label Current Weight:
-        input(type="text", name="currentWeight")
-        button(id="newWeight", type="submit", value="weight") Submit
+  if weightToGo === 0
+    p You've reached your weight loss goals!
+  if weightToGo !== 0    
+    p 
+      =weightToGo +' pounds to go!'   
+  div#popup
+    form(action="/progress", method="post")
+      label Current Weight:
+      input(type="text", name="currentWeight")
+      button(id="newWeight", type="submit", value="newWeight") Submit
   script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js")      
   script(src='/js/animation.js')      
