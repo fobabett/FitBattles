@@ -89,4 +89,39 @@ module.exports = function friendshipInit(options) {
       }
     });
   }
+
+  // get list of friends on account
+  FriendshipSchema.statics.getFriends = function(accountId, done) {
+    debug('GetFriends');
+
+    var friendIds = [];
+
+    var conditions = {
+      '$or': [
+        {requester: accountId},
+        {requested: accountId}
+      ],
+      status: 'Accepted'
+    }
+
+    this.find(conditions, function(err, friendships) {
+      if(err) {
+        done(err);
+      } else {
+        debug('friendships', friendships);
+
+        friendships.forEach(function(friendship) {
+          debug('friendship', friendship);
+
+          if(friendship.requester.equals(accountId)) {
+            friendIds.push(friendship.requested);
+          } else {
+            friendIds.push(friendship.requester);
+          }
+        });
+        debug('friendIds', friendIds);
+        done(null, friendIds);
+      }
+    });
+  }
 }
