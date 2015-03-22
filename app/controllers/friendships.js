@@ -49,4 +49,44 @@ module.exports = function friendshipInit(options) {
       done(null, requests);
     });
   }
+
+  FriendshipSchema.statics.getSentRequests = function(accountId, done) {
+    debug('getSentRequests')
+
+    var conditions = {
+      requester: accountId,
+      status: 'Pending'
+    }
+
+    this.find(conditions, done);
+  }
+
+  FriendshipSchema.statics.acceptRequest = function(accountId1, accountId2, done) {
+    debug('acceptRequest')
+    debug('accountId1', accountId1)
+    debug('accountId2', accountId2)
+
+    var conditions = {
+      '$or': [
+        {requester: accountId1, requested: accountId2},
+        {requester: accountId2, requested: accountId1}
+      ],
+      status: 'Pending'
+    }
+
+    var updates = {
+      status: 'Accepeted',
+      dateAccepted: Date.now()
+    }
+
+    this.findOneAndUpdate(conditions, updates, function(err, friendship) {
+      if(err) {
+        done(err);
+      } else if(friendship) {
+        done(null, friendship);
+      } else {
+        done(new Error('Cannot accept request that does not exist!'));
+      }
+    });
+  }
 }
