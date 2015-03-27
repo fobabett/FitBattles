@@ -18,7 +18,7 @@ userSchema.methods.validPassword = function (check_password) {
   return (passwordCrypt(check_password) === this.password);
 };
 
-function passwordCrypt(password) {
+userSchema.statics.passwordCrypt = function(password) {
 
   var salt = process.env.SALT;
     var user_password = password;

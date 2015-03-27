@@ -23,6 +23,7 @@ app.use(session(
 }));
 
 // middleware
+app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.engine('html', require('jade').__express);
@@ -62,6 +63,20 @@ passport.use(new LocalStrategy(
     });
   }
 ));
+
+app.post('/validateUser', function(req, res) {
+  User.findOne ({
+    username: req.body.username, 
+    password: User.passwordCrypt(req.body.password)
+  }, 
+  function (err, user) {
+    if (user) {
+      res.json({ success: true });
+    } else {
+      res.json({ success: false });    
+    }
+  });
+});
 
 var Routes = require('./controllers/routes');
 Routes(app);
