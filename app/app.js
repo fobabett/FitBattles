@@ -12,6 +12,7 @@ mongoose.connect(config.databaseURI);
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('./models/user');
 var logger = require('morgan');
+var cors = require('cors');
 
 
 app.use(session(
@@ -23,6 +24,7 @@ app.use(session(
 
 // middleware
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.engine('html', require('jade').__express);
 app.set('view engine', 'html');
 app.set('views', __dirname + '/views');
@@ -31,6 +33,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger("dev"));
 module.exports = app;
+app.use(cors());
 
 
 passport.serializeUser(function(user, done) {

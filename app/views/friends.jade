@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+html(lang="en")
+head
+  meta(charset="UTF-8")
+  link(rel='stylesheet', href='../css/styles.css') 
+  title Friends
+body
+  h1 Friends
+  form(action="/friends/:username", method="post")
+      label Search:
+      input(type="text", name="friendSearch")
+      button(id="friendSearch", type="submit", value="friendSearch") Search
+  p
+    //- =docs
+    =username    

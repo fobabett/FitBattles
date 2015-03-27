@@ -114,12 +114,13 @@ var Routes = function(app) {
       if(err) {
         throw err;
       }
-      console.log(req.user.currentWeight);
+      // console.log(req.user.currentWeight);
 
     })
     var weightLeft = req.user.currentWeight - req.user.goalWeight;
     var health = req.user.startingWeight - req.user.goalWeight;
-    var attack = health - req.user.currentWeight; 
+    var attack = health - req.user.currentWeight;
+
 
 
     res.render('progress.jade', {
@@ -133,6 +134,32 @@ var Routes = function(app) {
     })
   });
 
+    app.get('/progress/json', function(req, res){
+      User.findOne({username: 'fobabett'}, function(err, user) {
+        if(err) {
+          throw err;
+        }
+      console.log(user);
+      var weightLeft = user.currentWeight - user.goalWeight;
+      var health = user.startingWeight - user.goalWeight;
+      var attack = health - user.currentWeight;
+  
+  
+  
+      res.json({
+        startingWeight: user.startingWeight,
+        currentWeight: user.currentWeight,
+        goalWeight: user.goalWeight,
+        username: user.username,
+        weightToGo: weightLeft,
+        health: health,
+        attack: attack
+      })
+      })
+      
+
+  });
+
   app.post('/progress', function(req,res) {
     User.findOne(function(err, user) {
       
@@ -141,6 +168,8 @@ var Routes = function(app) {
       }
       if(user) {
         var activity = new Activity(req.body);
+
+        // var health = req.user.startingWeight - req.user.goalWeight;
   
         activity.user = req.body.user;
         activity.user = req.user.username;
@@ -154,10 +183,13 @@ var Routes = function(app) {
           }
         });
 
+
+
         req.user.weightLost = req.body.weightLost;
-        req.user.weightLost = req.body.currentWeight - req.body.currentWeight;
+        // req.user.weightLost = user.body.currentWeight - req.body.currentWeight;
         req.user.currentWeight = req.body.currentWeight;
-        
+        // req.body.points += 5;
+        // req.user.points = req.body.points; TO DO
 
         req.user.save(function(err, user) {
           if(err) {
@@ -170,7 +202,34 @@ var Routes = function(app) {
     })
   })
 
+  app.get('/friends', function(req, res) {
+    User.find({}, function(err, docs) {
+      res.render('friends.jade', {
+        docs: docs
+      })
+    })
+  });
 
+  app.get('/friends/:username', function(req, res) {
+    if(req.params.username) {
+      User.find({username: req.params.username}, function(err, docs) {
+        res.render('friends.jade', {
+          docs: docs
+        })
+      })
+    }
+  })
+
+  app.post('/friends/:username', function(req, res) {
+   if(req.params.username) {
+      User.find({username: req.params.username}, function(err, docs) {
+        res.render('friends.jade', {
+          username: req.params.username,
+          points: req.params.points
+        });
+      })
+    }
+  });
 
 
   // gets current and goal weight from user
@@ -183,6 +242,8 @@ var Routes = function(app) {
         req.user.startingWeight = req.body.startingWeight;
         req.user.goalWeight = req.body.goalWeight;
         req.user.currentWeight = req.body.startingWeight;
+        req.body.points = 2;
+        req.user.points = req.body.points;
 
         req.user.save(function(err, user) {
           if (err){
@@ -201,7 +262,6 @@ var Routes = function(app) {
   
   function ensureAuthenticated(req, res, next){
     console.log('login: ',req.user.username)
-    // console.log(req.isAuthenticated())
     if(req.isAuthenticated()){
       return next();
     }
